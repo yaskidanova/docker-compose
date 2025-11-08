@@ -1,0 +1,31 @@
+version: "3"
+
+services: 
+  db:
+    image: mysql:8.0
+    container_name: wordpress-db
+    restart: always
+    environment: 
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wp_user
+      MYSQL_PASSWORD: wp_password
+      MYSQL_ROOT_PASSWORD: root_password
+    networks:
+      - wp-network
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress-app
+    depens_on:
+      - db
+    ports:
+      - "80:80"
+    restart: always
+    environment: 
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wp_user
+      WORDPRESS_DB_PASSWORD: wp_password
+      WORDPRESS_DB_NAME: wordpress
+    network:
+      - wp-network
+network:
+  wp-network
